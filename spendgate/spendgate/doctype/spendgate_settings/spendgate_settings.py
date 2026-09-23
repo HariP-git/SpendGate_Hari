@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class SpendgateSettings(Document):
+class SpendGateSettings(Document):
 	pass

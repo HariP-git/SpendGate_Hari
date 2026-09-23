@@ -2,12 +2,20 @@
  "actions": [],
  "allow_bulk_edit": 1,
  "allow_rename": 1,
- "creation": "2026-09-22 16:17:33.910125",
+ "creation": "2026-09-23 10:01:59.426912",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_hwdc",
+  "section_break_vfvs",
   "amended_from",
+  "employee",
+  "department",
+  "budget",
+  "expense_date",
+  "description",
+  "section_break_hq7x",
+  "expense_line",
+  "section_break_zjar",
   "total_amount",
   "remaining_budget_at_submission",
   "status",
@@ -15,7 +23,7 @@
  ],
  "fields": [
   {
-   "fieldname": "section_break_hwdc",
+   "fieldname": "section_break_vfvs",
    "fieldtype": "Section Break"
   },
   {
@@ -23,10 +31,50 @@
    "fieldtype": "Link",
    "label": "Amended From",
    "no_copy": 1,
-   "options": "Totals and Status",
+   "options": "Expense Claim",
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "User",
+   "reqd": 1
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department ",
+   "options": "Department",
+   "reqd": 1
+  },
+  {
+   "fieldname": "expense_date",
+   "fieldtype": "Date",
+   "label": "Expense Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description ",
+   "reqd": 1
+  },
+  {
+   "fieldname": "section_break_hq7x",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "expense_line",
+   "fieldtype": "Table",
+   "label": "Expense Line",
+   "options": "Expense Line"
+  },
+  {
+   "fieldname": "section_break_zjar",
+   "fieldtype": "Section Break"
   },
   {
    "fieldname": "total_amount",
@@ -54,16 +102,24 @@
    "label": "Approved By",
    "options": "User",
    "read_only": 1
+  },
+  {
+   "fieldname": "budget",
+   "fieldtype": "Link",
+   "label": "Budget",
+   "options": "Budget",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-22 18:03:30.754483",
+ "modified": "2026-09-23 14:32:04.409731",
  "modified_by": "Administrator",
  "module": "SpendGate",
- "name": "Totals and Status",
+ "name": "Expense Claim",
+ "naming_rule": "By script",
  "owner": "Administrator",
  "permissions": [
   {

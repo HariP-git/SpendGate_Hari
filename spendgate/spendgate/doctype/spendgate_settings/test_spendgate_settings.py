@@ -13,9 +13,9 @@ IGNORE_TEST_RECORD_DEPENDENCIES = []  # eg. ["User"]
 
 
 
-class IntegrationTestSpendgateSettings(IntegrationTestCase):
+class IntegrationTestSpendGateSettings(IntegrationTestCase):
 	"""
-	Integration tests for SpendgateSettings.
+	Integration tests for SpendGateSettings.
 	Use this class for testing interactions between multiple components.
 	"""
 

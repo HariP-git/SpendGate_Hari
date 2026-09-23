@@ -126,9 +126,9 @@ app_license = "mit"
 # -----------
 # Permissions evaluated in scripted ways
 
-# permission_query_conditions = {
-# 	"Event": "frappe.desk.doctype.event.event.get_permission_query_conditions",
-# }
+permission_query_conditions = {
+	"Event": "spendgate.permission.get_expense_claims_safe",
+}
 #
 # has_permission = {
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
@@ -256,3 +256,35 @@ app_license = "mit"
 # List of apps whose translatable strings should be excluded from this app's translations.
 # ignore_translatable_strings_from = []
 
+fixtures = [
+    {
+        "dt": "Department",
+        "filters": [
+            ["department_name", "in", [
+                "Marketing",
+                "Travel & Client Entertainment",
+                "Equipment & Software",
+                "Training"
+            ]]
+        ]
+    },
+    {
+        "dt": "Role",
+        "filters": [
+            ["name", "in", [
+                "SG Staff",
+                "SG Department Head",
+                "SG Finance Manager"
+            ]]
+        ]
+    }
+]
+
+doc_events = {
+    "*": {
+        "on_update": "spendgate.audit.log_change",
+        "on_submit": "spendgate.audit.log_change",
+        "on_cancel": "spendgate.audit.log_change",
+        "on_trash": "spendgate.audit.log_change",
+    }
+}

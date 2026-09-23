@@ -1,0 +1,38 @@
+[
+ {
+  "department_head": null,
+  "department_name": "Marketing",
+  "description": null,
+  "docstatus": 0,
+  "doctype": "Department",
+  "modified": "2026-09-22 21:45:14.905497",
+  "name": "Marketing"
+ },
+ {
+  "department_head": null,
+  "department_name": "Travel & Client Entertainment",
+  "description": null,
+  "docstatus": 0,
+  "doctype": "Department",
+  "modified": "2026-09-22 21:45:15.057308",
+  "name": "Travel & Client Entertainment"
+ },
+ {
+  "department_head": null,
+  "department_name": "Equipment & Software",
+  "description": null,
+  "docstatus": 0,
+  "doctype": "Department",
+  "modified": "2026-09-22 21:45:15.059160",
+  "name": "Equipment & Software"
+ },
+ {
+  "department_head": null,
+  "department_name": "Training",
+  "description": null,
+  "docstatus": 0,
+  "doctype": "Department",
+  "modified": "2026-09-22 21:45:15.061304",
+  "name": "Training"
+ }
+]

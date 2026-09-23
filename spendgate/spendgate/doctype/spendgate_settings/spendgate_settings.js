@@ -1,7 +1,7 @@
 // Copyright (c) 2026, Hari and contributors
 // For license information, please see license.txt
 
-// frappe.ui.form.on("Spendgate Settings", {
+// frappe.ui.form.on("SpendGate Settings", {
 // 	refresh(frm) {
 
 // 	},

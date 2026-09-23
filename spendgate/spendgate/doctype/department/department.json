@@ -7,7 +7,7 @@
  "engine": "InnoDB",
  "field_order": [
   "section_break_xitu",
-  "department__name",
+  "department_name",
   "department_head",
   "description"
  ],
@@ -15,14 +15,6 @@
   {
    "fieldname": "section_break_xitu",
    "fieldtype": "Section Break"
-  },
-  {
-   "bold": 1,
-   "fieldname": "department__name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Department  Name",
-   "reqd": 1
   },
   {
    "fieldname": "department_head",
@@ -34,12 +26,20 @@
    "fieldname": "description",
    "fieldtype": "Small Text",
    "label": "Description"
+  },
+  {
+   "bold": 1,
+   "fieldname": "department_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Department  Name",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-22 18:02:59.961042",
+ "modified": "2026-09-22 21:27:52.160525",
  "modified_by": "Administrator",
  "module": "SpendGate",
  "name": "Department",
