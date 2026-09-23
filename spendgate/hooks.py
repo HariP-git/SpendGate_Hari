@@ -86,7 +86,7 @@ app_license = "mit"
 # ------------
 
 # before_install = "spendgate.install.before_install"
-# after_install = "spendgate.install.after_install"
+after_install = "spendgate.install.after_install"
 
 # Uninstallation
 # ------------
