@@ -1,46 +1,91 @@
 import frappe
 
-def get_claims_pending_approval():
-    frappe.qb = frappe.get_query_builder()
-    EC = frappe.qb.DocType("Expense Claim")
-    result = (
-        frappe.qb.from_(EC)
-        .select(EC.name, EC.employee, EC.department, EC.total_amount, EC.expense_date)
-        .where(EC.status == "Pending Approval")
-        .order_by(EC.expense_date.asc())
-        .run(as_dict=True)
-    )
-    return result
-
-def reassign_department_claims(from_dept, to_dept):
-    try:
-        frappe.db.sql(
-            """
-            UPDATE `tabExpense Claim`
-            SET department = %s
-            WHERE department = %s AND status = 'Draft'
-            """,
-            (to_dept, from_dept),
-        )
-        frappe.db.commit()
-    except Exception as e:
-        frappe.db.rollback()
-        frappe.log_error(f"Error reassigning claims from {from_dept} to {to_dept}: {str(e)}")
-        raise
-
-frappe.whitelist(allow_guest=True)
+@frappe.whitelist(allow_guest=True)
 def share_expense_claim(claim_name, user_email):
-    try:
-        frappe.share.add(
-            doctype="Expense Claim",
-            name=claim_name,
-            user=user_email,
-            read=1,
-            write=0,
-            share=0
-        )
-        return {"status": "success", "message": f"Read access granted to {user_email} for claim {claim_name}"}
-    except Exception as e:
-        frappe.log_error(f"Error sharing claim {claim_name} with {user_email}: {str(e)}")
-        return {"status": "error", "message": str(e)}   
+    frappe.share.add(
+        "Expense Claim",
+        claim_name,
+        user_email,
+        read=1
+    )
 
+    return {
+        "success": True
+    }
+
+
+@frappe.whitelist()
+def get_expense_claims():
+    return frappe.get_list(
+        "Expense Claim",
+        fields=[
+            "name",
+            "employee",
+            "department",
+            "total_claimed_amount"
+        ]
+    )
+
+
+@frappe.whitelist()
+def get_expense_claims_unsafe():
+    return frappe.get_all(
+        "Expense Claim",
+        fields=[
+            "name",
+            "employee",
+            "department",
+            "total_claimed_amount"
+        ]
+    )
+
+
+@frappe.whitelist()
+def get_budget_status():
+    budget_name = frappe.form_dict.get("budget_name")
+
+    if not budget_name:
+        frappe.local.response.http_status_code = 404
+        return {"error": "Not found"}
+
+    budget = frappe.db.get_value(
+        "Budget",
+        budget_name,
+        ["total_allocated"],
+        as_dict=True
+    )
+
+    if not budget:
+        frappe.local.response.http_status_code = 404
+        return {"error": "Not found"}
+
+    spent = frappe.db.sql(
+        """
+        SELECT COALESCE(SUM(el.amount), 0)
+        FROM `tabExpense Claim` ec
+        INNER JOIN `tabExpense Line` el
+            ON el.parent = ec.name
+        WHERE ec.budget = %s
+        AND ec.docstatus = 1
+        """,
+        budget_name
+    )[0][0]
+
+    allocated = budget.total_allocated or 0
+    spent = spent or 0
+    remaining = allocated - spent
+
+    utilization_percent = (
+        (spent / allocated) * 100
+        if allocated
+        else 0
+    )
+
+    return {
+        "allocated": allocated,
+        "spent": spent,
+        "remaining": remaining,
+        "utilization_percent": utilization_percent
+    }
+    
+    

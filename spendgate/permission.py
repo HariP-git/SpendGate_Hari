@@ -1,34 +1,21 @@
 import frappe
 
+def expense_claim_query(user):
+    if "SG Finance Manager" in frappe.get_roles(user):
+        return ""
 
-frappe.whitelist(allow_guest=True)
-def get_expense_claims_safe():
-    user = frappe.session.user
-    user_roles = frappe.get_roles(user)
-
-    if "SG Staff" in user_roles:
-        claims = frappe.get_list(
-            "Expense Claim",
-            filters={"employee": user},
-            fields=["name", "employee", "department", "total_amount", "status", "expense_date"]
+    if "SG Department Head" in frappe.get_roles(user):
+        department = frappe.db.get_value(
+            "Employee",
+            {"user_id": user},
+            "department"
         )
-    elif "SG Department Head" in user_roles:
-        department = frappe.get_value("Employee", {"user_id": user}, "department")
-        claims = frappe.get_list(
-            "Expense Claim",
-            filters={"department": department},
-            fields=["name", "employee", "department", "total_amount", "status", "expense_date"]
-        )
-    else:
-        claims = []
 
-    return claims
+        if department:
+            return f"`tabExpense Claim`.`department` = {frappe.db.escape(department)}"
 
-frappe.whitelist(allow_guest=True)
-def get_expense_claims_unsafe():
-    claims = frappe.get_all(
-        "Expense Claim",
-        fields=["*"]
-    )
-    return claims
+        return "1=0"
 
+    if "SG Staff" in frappe.get_roles(user):
+        return f"`tabExpense Claim`.`employee` = {frappe.db.escape(user)}"
+    

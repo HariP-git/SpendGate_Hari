@@ -1,6 +1,7 @@
 import frappe
 from frappe.utils import get_url
 
+
 def after_install():
     default_departments = [
         "Marketing",
@@ -8,6 +9,7 @@ def after_install():
         "Equipment & Software",
         "Training"
     ]
+
     for dept in default_departments:
         if not frappe.db.exists("Department", {"department_name": dept}):
             frappe.get_doc({
@@ -21,8 +23,12 @@ def after_install():
         "Client Entertainment",
         "Training"
     ]
+
     for category in default_categories:
-        if not frappe.db.exists("Expense Category", {"category_name": category}):
+        if not frappe.db.exists(
+            "Expense Category",
+            {"category_name": category}
+        ):
             frappe.get_doc({
                 "doctype": "Expense Category",
                 "category_name": category
@@ -34,4 +40,8 @@ def after_install():
         }).insert(ignore_permissions=True)
 
     settings_url = get_url("/app/spendgate-settings")
-    frappe.msgprint(f"SpendGate installation completed successfully! You can configure settings <a href='{settings_url}'>here</a>.")
+
+    frappe.msgprint(
+        f"SpendGate installation completed successfully! "
+        f"You can configure settings <a href='{settings_url}'>here</a>."
+    )

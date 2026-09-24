@@ -1,9 +1,6 @@
-// Copyright (c) 2026, Hari and contributors
-// For license information, please see license.txtd
-
 frappe.ui.form.on("Expense Claim", {
     setup(frm) {
-        frm.set_query("budget", function () {
+        frm.set_query("budget", () => {
             return {
                 filters: {
                     department: frm.doc.department,
@@ -11,86 +8,171 @@ frappe.ui.form.on("Expense Claim", {
                 }
             };
         });
-        
     },
+
     onload(frm) {
         if (frm.is_new() && !frm.doc.expense_date) {
             frm.set_value("expense_date", frappe.datetime.get_today());
         }
+
+        frm.trigger("loadBudget");
     },
+
     refresh(frm) {
         frm.dashboard.clear_headline();
-        if (frm.doc.status === "Pending Approval") {
-            frm.dashboard.add_indicator(__("Pending Approval"), "orange");
-            if (frappe.user.has_role(["Department Head", "Finance Manager"])) {
-                frm.add_custom_button(__('Approve'), function () {
+
+        if (frm.doc.status === "Pending") {
+            frm.dashboard.add_indicator(
+                ("Pending Approval"),
+                "orange"
+            );
+
+            if (
+                frappe.user.has_role("SG Department Head") ||
+                frappe.user.has_role("SG Finance Manager")
+            ) {
+                frm.add_custom_button(("Approve"), () => {
                     frappe.call({
                         method: "spendgate.spendgate.doctype.expense_claim.expense_claim.approve_expense_claim",
-                        args: { expense_claim: frm.doc.name },
-                        callback: function (r) {
+                        args: {
+                            claim_name: frm.doc.name
+                        },
+                        callback(r) {
                             if (!r.exc) {
                                 frm.reload_doc();
                             }
                         }
                     });
                 });
+
+                frm.add_custom_button(("Reject Claim"), () => {
+                    frappe.prompt(
+                        {
+                            label: ("Rejection Reason"),
+                            fieldname: "rejection_reason",
+                            fieldtype: "Small Text",
+                            reqd: 1
+                        },
+                        values => {
+                            frappe.confirm(
+                                ("Reject this Expense Claim?"),
+                                () => {
+                                    frappe.call({
+                                        method: "spendgate.spendgate.doctype.expense_claim.expense_claim.reject_expense_claim",
+                                        args: {
+                                            claim_name: frm.doc.name,
+                                            rejection_reason: values.rejection_reason
+                                        },
+                                        callback(r) {
+                                            if (!r.exc) {
+                                                frm.reload_doc();
+                                            }
+                                        }
+                                    });
+                                }
+                            );
+                        },
+                        ("Reject Expense Claim"),
+                        ("Reject")
+                    );
+                });
             }
-        } else if (frm.doc.status === "Approved") {
-            frm.dashboard.add_indicator(__("Approved"), "green");
-        } else if (frm.doc.status === "Rejected") {
-            frm.dashboard.add_indicator(__("Rejected"), "red");
         }
 
-    },
-    expense_lines_amount(frm, cdt, cdn) {
-        const expense_line = frappe.get_doc(cdt, cdn);
-        const total_amount = frm.doc.expense_lines.reduce((sum, line) => sum + (line.amount || 0), 0);
-        frm.set_value("total_amount", total_amount);
+        if (frm.doc.status === "Approved") {
+            frm.dashboard.add_indicator(("Approved"), "green");
+        }
 
-        if (frm.doc.budget) {
-            frappe.call({
-                method: "spendgate.spendgate.doctype.expense_claim.expense_claim.get_remaining_budget",
-                args: { budget: frm.doc.budget },
-                callback: function (r) {
-                    if (!r.exc) {
-                        const remaining_budget = r.message;
-                        if (total_amount > remaining_budget) {
-                            frappe.msgprint(__("Warning: Total amount exceeds the remaining budget of {0}.", [remaining_budget]));
+        if (frm.doc.status === "Rejected") {
+            frm.dashboard.add_indicator(("Rejected"), "red");
+        }
+
+        frm.add_custom_button(("Reassign Department"), () => {
+            frappe.prompt(
+                {
+                    label: ("Department"),
+                    fieldname: "department",
+                    fieldtype: "Link",
+                    options: "Department",
+                    reqd: 1
+                },
+                values => {
+                    frappe.confirm(
+                        ("Reassign this claim to {0}?", [values.department]),
+                        () => {
+                            frappe.call({
+                                method: "spendgate.spendgate.doctype.expense_claim.expense_claim.reassign_department",
+                                args: {
+                                    claim_name: frm.doc.name,
+                                    department: values.department
+                                },
+                                callback(r) {
+                                    if (!r.exc) {
+                                        frm.set_value("department", values.department);
+                                        frm.trigger("department");
+                                    }
+                                }
+                            });
                         }
-                    }
-                }
-            });
-        }
+                    );
+                },
+                ("Reassign Department"),
+                ("Continue")
+            );
+        });
     },
 
-});
-    
-let d = new frappe.ui.Dialog({
-    title: __("Reject Expense Claim"),
-    fields: [
-        {
-            label: __("Rejection Reason"),
-            fieldname: "rejection_reason",
-            fieldtype: "Small Text",
-            reqd: 1
+    department(frm) {
+        frm.trigger("loadBudget");
+    },
+
+    budget(frm) {
+        frm.trigger("loadBudget");
+    },
+
+    loadBudget(frm) {
+        if (!frm.doc.budget) {
+            frm.budgetRemaining = 0;
+            return;
         }
-    ],
-    primary_action_label: __("Reject"),
-    primary_action(values) {
+
         frappe.call({
-            method: "spendgate.spendgate.doctype.expense_claim.expense_claim.reject_expense_claim",
+            method: "spendgate.spendgate.doctype.expense_claim.expense_claim.get_remaining_budget",
             args: {
-                expense_claim: frm.doc.name,
-                rejection_reason: values.rejection_reason
+                budget: frm.doc.budget
             },
-            callback: function (r) {
+            callback(r) {
                 if (!r.exc) {
-                    frm.reload_doc();
-                    d.hide();
+                    frm.budgetRemaining = r.message || 0;
+
+                    frm.dashboard.add_indicator(
+                        ("Budget Remaining: {0}", [
+                            frm.budgetRemaining
+                        ]),
+                        "blue"
+                    );
                 }
             }
         });
-    }
-}); 
+    },
 
-d.show();
+    expenseLinesAmount(frm) {
+        const total = (frm.doc.expense_lines || []).reduce(
+            (sum, row) => sum + (row.amount || 0),
+            0
+        );
+
+        frm.set_value("total_amount", total);
+
+        if (
+            frm.budgetRemaining !== undefined &&
+            total > frm.budgetRemaining
+        ) {
+            frappe.msgprint(
+                ("Warning: Total amount exceeds the remaining budget of {0}.", [
+                    frm.budgetRemaining
+                ])
+            );
+        }
+    }
+});

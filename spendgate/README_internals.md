@@ -71,6 +71,30 @@ query = """
 The parameterized version is always preferred because it helps prevent SQL injection attacks by separating the query structure from the data being passed into it. By using placeholders (%s) for the parameters, the database engine can safely handle the input values without executing them as part of the SQL command, thus enhancing security and ensuring that user input does not compromise the integrity of the database.
 
 
+J1 — Expense Claim Voucher:
+
+When you put a frappe.get_all() call directly inside the Jinja template, it will execute the database query every time the template is rendered. This can lead to multiple database hits, especially if the template is rendered multiple times or if there are many records to fetch. This can significantly slow down the rendering process and increase the load on the database.
+
+The next hand pre-computing the data in the before_print() method allows you to fetch all the necessary data in a single database query before the template is rendered. You can then store this data in a field (e.g., doc.precomputed_field) and reference it in the Jinja template. This approach reduces the number of database queries, improves performance, and ensures that the data is consistent throughout the rendering process.
+
+
+K2 — Spot the N+1:
+
+Perform 2 operation sepeately and then combine the results to avoid the N+1 query problem. Here's the corrected version of the code:
+claims = frappe.get_all("Expense Claim", fields=["name","department"])
+department_names = {d.name: d for d in frappe.get_all("Department", fields=["name", "department_name", "department_head"])}
+for c in claims:
+    dept = department_names.get(c.department)
+    if dept:
+        print(dept.department_name, dept.department_head) 
+
+for each claim, we first fetch all the departments in a single query and store them in a dictionary for quick lookup. Then, we iterate over the claims and retrieve the corresponding department information from the pre-fetched dictionary. This way, we avoid making a separate database query for each claim, thus preventing the N+1 query problem and improving performance.
+
+
+
+
+
+
 
 
 

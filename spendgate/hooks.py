@@ -127,7 +127,7 @@ after_install = "spendgate.install.after_install"
 # Permissions evaluated in scripted ways
 
 permission_query_conditions = {
-	"Event": "spendgate.permission.get_expense_claims_safe",
+    "Expense Claim": "spendgate.permission.expense_claim_query"
 }
 #
 # has_permission = {
@@ -166,6 +166,13 @@ permission_query_conditions = {
 # 		"spendgate.tasks.monthly"
 # 	],
 # }
+
+scheduler_events = {
+    "daily": [
+            "spendgate.tasks.check_budget_thresholds"
+        ]
+}
+    
 
 # Testing
 # -------
