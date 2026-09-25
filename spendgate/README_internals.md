@@ -91,6 +91,12 @@ for c in claims:
 for each claim, we first fetch all the departments in a single query and store them in a dictionary for quick lookup. Then, we iterate over the claims and retrieve the corresponding department information from the pre-fetched dictionary. This way, we avoid making a separate database query for each claim, thus preventing the N+1 query problem and improving performance.
 
 
+N1 — ignore_permissions Audit & JS-Hiding Pitfal
+
+I have used the ignore_permission in the tasks file, audit file and install files which bypass the permission checks the data when the user does not have access the data. So it will also cause the ssecurity issues and data leaks.
+
+Hiding js file is not a security measure because the user can still access the data by using the API or by inspecting the network requests. So it will not prevent the user from accessing the data.
+
 
 
 

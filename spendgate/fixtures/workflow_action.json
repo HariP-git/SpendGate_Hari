@@ -1,0 +1,128 @@
+[
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "SG Staff",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-09-25 11:15:24.036436",
+  "name": "q2tqp5urk7",
+  "permitted_roles": [
+   {
+    "role": "SG Staff"
+   }
+  ],
+  "reference_doctype": "Expense Claim",
+  "reference_name": "EXP-2026-00007",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "SG Staff",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-09-25 11:15:32.278811",
+  "name": "q489bp0gjh",
+  "permitted_roles": [
+   {
+    "role": "SG Staff"
+   }
+  ],
+  "reference_doctype": "Expense Claim",
+  "reference_name": "EXP-2026-00007",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "SG Department Head",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-09-25 11:15:37.494386",
+  "name": "q6qrnpds02",
+  "permitted_roles": [
+   {
+    "role": "SG Department Head"
+   }
+  ],
+  "reference_doctype": "Expense Claim",
+  "reference_name": "EXP-2026-00007",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Approval"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-09-25 11:15:37.501536",
+  "name": "q8fu7qdk69",
+  "permitted_roles": [
+   {
+    "role": "SG Department Head"
+   }
+  ],
+  "reference_doctype": "Expense Claim",
+  "reference_name": "EXP-2026-00007",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Approved"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "SG Staff",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-09-25 11:43:06.328456",
+  "name": "aalg1iiqst",
+  "permitted_roles": [
+   {
+    "role": "SG Staff"
+   }
+  ],
+  "reference_doctype": "Expense Claim",
+  "reference_name": "EXP-2026-00008",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Draft"
+ },
+ {
+  "completed_by": "Administrator",
+  "completed_by_role": "SG Staff",
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-09-25 11:43:09.911316",
+  "name": "abn89pm5n7",
+  "permitted_roles": [
+   {
+    "role": "SG Staff"
+   }
+  ],
+  "reference_doctype": "Expense Claim",
+  "reference_name": "EXP-2026-00008",
+  "status": "Completed",
+  "user": null,
+  "workflow_state": "Pending"
+ },
+ {
+  "completed_by": null,
+  "completed_by_role": null,
+  "docstatus": 0,
+  "doctype": "Workflow Action",
+  "modified": "2026-09-25 11:43:09.917339",
+  "name": "acr4ves0in",
+  "permitted_roles": [
+   {
+    "role": "SG Department Head"
+   }
+  ],
+  "reference_doctype": "Expense Claim",
+  "reference_name": "EXP-2026-00008",
+  "status": "Open",
+  "user": null,
+  "workflow_state": "Approval"
+ }
+]

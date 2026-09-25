@@ -9,7 +9,8 @@
   "section_break_vdcn",
   "finance_email",
   "low_budget_alert_threshold_percent",
-  "fiscal_year_start_month"
+  "fiscal_year_start_month",
+  "web_hook_url"
  ],
  "fields": [
   {
@@ -34,13 +35,18 @@
    "fieldname": "fiscal_year_start_month",
    "fieldtype": "Int",
    "label": "Fiscal Year Start Month"
+  },
+  {
+   "fieldname": "web_hook_url",
+   "fieldtype": "Data",
+   "label": "Web Hook Url"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-09-24 18:21:11.760533",
+ "modified": "2026-09-25 14:43:25.051503",
  "modified_by": "Administrator",
  "module": "SpendGate",
  "name": "SpendGate Settings",

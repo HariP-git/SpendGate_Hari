@@ -89,3 +89,18 @@ def get_budget_status():
     }
     
     
+def send_webhook(claim_name):
+    import requests
+    settings = frappe.get_single("SpendGate Settings")
+    if not settings.web_hook_url:
+        return
+    doc = frappe.get_doc("Expense Claim", claim_name)
+    payload = {"event": "claim_submitted", "claim": doc.name, "amount": doc.total_amount}
+    try:
+        r = requests.post(settings.web_hook_url, json=payload, timeout=5)
+        r.raise_for_status()
+        frappe.log_error(f"Webhook sent successfully for claim {claim_name}", "Webhook Info")
+    except requests.exceptions.RequestException as e:
+        frappe.log_error(f"Webhook failed: {e}", "Webhook Error")
+    except Exception as e:
+        frappe.log_error(f"Webhook failed: {e}", "Webhook Error")

@@ -19,7 +19,8 @@
   "total_amount",
   "remaining_budget_at_submission",
   "status",
-  "approved_by"
+  "approved_by",
+  "workflow_state"
  ],
  "fields": [
   {
@@ -109,13 +110,18 @@
    "label": "Budget",
    "options": "Budget",
    "reqd": 1
+  },
+  {
+   "fieldname": "workflow_state",
+   "fieldtype": "Data",
+   "label": "Workflow State"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-09-23 14:32:04.409731",
+ "modified": "2026-09-25 10:42:45.694392",
  "modified_by": "Administrator",
  "module": "SpendGate",
  "name": "Expense Claim",

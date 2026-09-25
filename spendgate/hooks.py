@@ -266,25 +266,18 @@ scheduler_events = {
 fixtures = [
     {
         "dt": "Department",
-        "filters": [
-            ["department_name", "in", [
-                "Marketing",
-                "Travel & Client Entertainment",
-                "Equipment & Software",
-                "Training"
-            ]]
-        ]
+        "filters": [["department_name", "in", ["Marketing", "Travel & Client Entertainment", "Equipment & Software", "Training"]]]
     },
     {
         "dt": "Role",
-        "filters": [
-            ["name", "in", [
-                "SG Staff",
-                "SG Department Head",
-                "SG Finance Manager"
-            ]]
-        ]
-    }
+        "filters": [["name", "in", ["SG Staff", "SG Department Head", "SG Finance Manager"]]]
+    },
+    {
+        "dt": "Workflow",
+        "filters": [["name", "in", ["spendgate_flow"]]]
+    },
+    "Workflow State",   
+    "Workflow Action"   
 ]
 
 doc_events = {

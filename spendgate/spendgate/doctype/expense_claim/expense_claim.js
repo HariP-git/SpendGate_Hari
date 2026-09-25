@@ -157,7 +157,7 @@ frappe.ui.form.on("Expense Claim", {
     },
 
     expenseLinesAmount(frm) {
-        const total = (frm.doc.expense_lines || []).reduce(
+        const total = (frm.doc.expense_line || []).reduce(
             (sum, row) => sum + (row.amount || 0),
             0
         );

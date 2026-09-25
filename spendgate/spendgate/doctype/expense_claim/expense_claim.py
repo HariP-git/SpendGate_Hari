@@ -47,6 +47,7 @@ class ExpenseClaim(Document):
 			self.approved_by = frappe.session.user
 
 		frappe.enqueue("spendgate.notifications.notify_finance_of_new_claim", claim_name=self.name)
+		frappe.enqueue("spendgate.api.send_webhook", claim_name=self.name)
 
 	def on_cancel(self):
 		if self.status == "Reimbursed":
